@@ -3,8 +3,8 @@
     [draggable]="true" id="{{note.id}}" [ngStyle]="{'background-color':nodeId === note.id ? [bgColorClass] : [note.colorname]}" cdkDrag>
     <div class="note_toolbar">
       <span class="close-1 material-icons" (click)="deleteNote($event)">close</span>
-      <span style="float: right;" class="close-1 material-icons" (click)="saveapi(note)">save</span>
-      <span style="float: right;" class="close-1 material-icons" (click)="deleteNote($event)">delete</span>
+      <span style="float: right;" class="close-1 material-icons" (click)="SaveStickyNotes(note)">save</span>
+      <span style="float: right;" class="close-1 material-icons" (click)="GetStickyNotes()">delete</span>
     </div>
     <input type="text" class="titletb" placeholder="Type a title ..." (keyup)="entertitle($event.target.value,note.id)"/>
     <div>

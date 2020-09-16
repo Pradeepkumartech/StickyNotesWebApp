@@ -29,6 +29,8 @@
     "ngx-bootstrap": "^6.1.0",
     "ngx-bootstrap-modal": "^2.0.1",
     "rxjs": "~6.5.5",
+    "rxjs-compat": "^6.6.3",
+    "sweetalert2": "^10.0.2",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"
   },

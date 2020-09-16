@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Output, ElementRef } from '@angular/core'
+import { Component, EventEmitter, Output, ElementRef, ɵConsole } from '@angular/core'
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NgbModule, ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { HttpClient } from '@angular/common/http';
-import {GlobalConstants} from '../../Common/global.constants';
+import { ManageStickNotesService } from '../../Services/manage-stick-notes.service';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 @Component({
   selector: 'app-manage-sticky-notes',
@@ -18,11 +18,9 @@ export class ManageStickyNotesComponent {
   colorsArray: any;
   bgColorClass: string;
   closeResult: string;
-  url:string;
-  constructor(private el: ElementRef, private modalService: NgbModal,private http: HttpClient) {
+  constructor(private el: ElementRef, private modalService: NgbModal, private _manageStickNotesService: ManageStickNotesService) {
     const { webkitSpeechRecognition }: IWindow = <IWindow><unknown>window;
     this.recognition = new webkitSpeechRecognition();
-    this.url =  GlobalConstants.apiURL + "api/ManageStickyNotes";
     this.recognition.onresult = (event) => {
       this.el.nativeElement.querySelector(".content").innerText += event.results[0][0].transcript
       console.log(event.results[0][0].transcript)
@@ -30,6 +28,7 @@ export class ManageStickyNotesComponent {
     };
 
   }
+
 
   ngOnInit(): void {
     this.colorsArray = [
@@ -176,14 +175,65 @@ export class ManageStickyNotesComponent {
     });
   }
 
-  saveapi(note) {
-    console.log(note);
-    var formData = new FormData();
-    formData.append('id',note.id);
-    formData.append('Title',note.title);
-    formData.append('Description',note.content);
-    formData.append('ColorName',note.colorname);
-    return this.http.post<any>( this.url, formData);
+  SaveStickyNotes(note) {
+    this._manageStickNotesService.SaveStickyNotes(note).subscribe(
+      data => {
+        if (data.isSuccess) {
+          Swal.fire({
+            title: data.message,
+            icon: 'success',
+            width: 500,
+            padding: '4em',
+          });
+        }
+        else {
+          Swal.fire({
+            icon: 'error',
+            title: data.message,
+            text: 'Oops...',
+            width: 500,
+            padding: '4em',
+          })
+        }
+      },
+      error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Something went wrong!',
+          text: 'Oops...',
+          width: 500,
+          padding: '4em',
+        })
+      }
+    )
+  }
+
+ async GetStickyNotes(){
+    this._manageStickNotesService.GetStickyNotes().subscribe(
+      data=>{
+        if (data.isSuccess) {
+          console.log(data);
+        }
+        else {
+          Swal.fire({
+            icon: 'error',
+            title: data.message,
+            text: 'Oops...',
+            width: 500,
+            padding: '4em',
+          })
+        }
+      },
+      error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Something went wrong!',
+          text: 'Oops...',
+          width: 500,
+          padding: '4em',
+        })
+      }
+    )
   }
 
 }
