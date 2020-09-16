@@ -1,0 +1,43 @@
+<div class="app">
+  <div class="note Zindex{{note.id}}" *ngFor="let note of notes" (click)="onDismiss($event)" dropzone="true"
+    [draggable]="true" id="{{note.id}}" [ngStyle]="{'background-color':nodeId === note.id ? [bgColorClass] : [note.colorname]}" cdkDrag>
+    <div class="note_toolbar">
+      <span class="close-1 material-icons" (click)="deleteNote($event)">close</span>
+      <span style="float: right;" class="close-1 material-icons" (click)="saveapi(note)">save</span>
+      <span style="float: right;" class="close-1 material-icons" (click)="deleteNote($event)">delete</span>
+    </div>
+    <input type="text" class="titletb" placeholder="Type a title ..." (keyup)="entertitle($event.target.value,note.id)"/>
+    <div>
+      <textarea class="desctb" placeholder="Type a description ..." (keyup)="entercontent($event.target.value,note.id)"></textarea>
+    </div>
+    <div class="colors" *ngFor="let colorname of colorsArray" id="{{colorname.id}}">
+      <button class="circle {{colorname.color}}" (click)="setColor($event)"></button>
+    </div>
+
+
+</div>
+</div>
+
+<button class="add material-icons floating-btn-1" (click)="open(mymodal)">list</button>
+<button class="add material-icons floating-btn" (click)="addNote()">note_add</button>
+
+<ng-template #mymodal let-modal aria-labelledby="myModalLabel">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title myModalLabel">Sticky Notes List</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+    <div >
+      <ul class="list-group list-group-flush">
+        <li *ngFor="let item of notes" class="list-group-item border border-3 {{item.colorname}}">
+          <span class="mr-md-3"><h1>{{item.title}}</h1></span> 
+        </li>
+      </ul>
+    </div>
+    </div>
+
+  </div><!-- modal-content -->
+</ng-template>
